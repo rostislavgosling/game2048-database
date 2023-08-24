@@ -4,14 +4,16 @@ from datetime import datetime
 import tkinter as tk
 
 
+# Function that connects buttons to a game
 def game_commands(text, game, r):
-
-    game_con, cur_score = gm.input_command(text)
+    game_con, cur_score = game.input_command(text.lower())
     print(game)
     print(f'Score:{cur_score}')
     if not game_con:
         add_game(cur_score, user_cur_id)
+        write_max_score(user_cur_id)
         r.destroy()
+
 
 # Create a database with users and games
 def db_create():
@@ -68,27 +70,45 @@ def write_max_score(user_id):
 
 
 if __name__ == '__main__':
-
+    # Create a database if it doesn't exist
     db_create()
 
     print("Welcome to the game\n Please enter your nickname:")
 
     nick = input()
     user_cur_id = add_user(nick)
-    gm = Game()
+    game_object = Game()
 
     print('If you want to start enter "Start" if not enter "EndGame"')
 
+    # Creating an interface window
     root = tk.Tk()
     root.title("Button Interface")
 
-    button_names = ["up", "down", "left", "right", "Start", "EndGame"]
+    button_frame = tk.Frame(root)
+    button_frame.grid()
+    root.geometry("280x200")
 
-    for i, button_text in enumerate(button_names):
+    button_up = tk.Button(root, text='Up', command=lambda text='up': game_commands(text, game_object, root))
+    button_up.grid(row=0, column=1, padx=10, pady=10)
 
-        button = tk.Button(root, text=button_text, command=lambda text=button_text: game_commands(text, gm, root))
-        button.grid(row=i // 2, column=i % 2, padx=10, pady=10)
+    button_down = tk.Button(root, text='Down', command=lambda text='down': game_commands(text, game_object, root))
+    button_down.grid(row=2, column=1, padx=10, pady=10)
 
+    button_left = tk.Button(root, text='Left', command=lambda text='left': game_commands(text, game_object, root))
+    button_left.grid(row=1, column=0, padx=10, pady=10)
+
+    button_right = tk.Button(root, text='Right', command=lambda text='right': game_commands(text, game_object, root))
+    button_right.grid(row=1, column=2, padx=10, pady=10)
+
+    button_start = tk.Button(root, text="Start", command=lambda
+                             text="Start": game_commands(text, game_object, root))
+    button_start.grid(row=0, column=3, padx=10, pady=10)
+
+    button_endgame = tk.Button(root, text="End Game", command=lambda
+                               text="EndGame": game_commands(text, game_object, root))
+
+    button_endgame.grid(row=2, column=3, padx=10, pady=10)
+
+    root.attributes("-topmost", True)
     root.mainloop()
-
-    write_max_score(user_cur_id)

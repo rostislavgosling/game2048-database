@@ -12,6 +12,9 @@ class Game:
     def __str__(self):
         return str(self.__field)
 
+    def get_field(self):
+        return self.__field
+
     # Function for adding a number to the empty cell in the field
     def __add_one(self) -> bool:
         # List for empty cells
@@ -130,9 +133,9 @@ class Game:
     # and score
     def input_command(self, command: str) -> tuple[bool, int]:
 
-        if self.__score == 0 and command == 'Start':
+        if self.__score == 0 and command == 'start':
             return self.__add_one(), self.__score
         if self.__score != 0 and command in self.__commands:
             return self.__transform_and_move(command)
-        if command == 'EndGame':
+        if command == 'endgame':
             return self.__game_over()
