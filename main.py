@@ -7,8 +7,9 @@ import tkinter as tk
 # Function that connects buttons to a game
 def game_commands(text, game, r):
     game_con, cur_score = game.input_command(text.lower())
-    print(game)
-    print(f'Score:{cur_score}')
+    text_widget.delete("1.0", "end")
+    text_widget.insert("1.0", game)
+    text_widget.insert("1.0", f'Current score: {cur_score}\n')
     if not game_con:
         add_game(cur_score, user_cur_id)
         write_max_score(user_cur_id)
@@ -87,7 +88,7 @@ if __name__ == '__main__':
 
     button_frame = tk.Frame(root)
     button_frame.grid()
-    root.geometry("280x200")
+    root.geometry("640x480")
 
     button_up = tk.Button(root, text='Up', command=lambda text='up': game_commands(text, game_object, root))
     button_up.grid(row=0, column=1, padx=10, pady=10)
@@ -109,6 +110,9 @@ if __name__ == '__main__':
                                text="EndGame": game_commands(text, game_object, root))
 
     button_endgame.grid(row=2, column=3, padx=10, pady=10)
+
+    text_widget = tk.Text(root, wrap="word", height=10, width=40)
+    text_widget.grid(row=4, column=5, padx=20, pady=10)
 
     root.attributes("-topmost", True)
     root.mainloop()

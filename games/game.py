@@ -10,7 +10,7 @@ class Game:
         self.__score = 0
 
     def __str__(self):
-        return str(self.__field)
+        return ' ' + ''.join(x for x in str(self.__field) if x not in ['[', ']'])
 
     def get_field(self):
         return self.__field
