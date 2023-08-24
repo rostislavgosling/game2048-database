@@ -3,7 +3,6 @@ import numpy as np
 
 
 class Game:
-
     __commands = ['up', 'down', 'left', 'right']
 
     def __init__(self, f=np.array([[0, 0, 0, 0] for _ in range(4)])):

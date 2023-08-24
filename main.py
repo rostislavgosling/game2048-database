@@ -1,7 +1,17 @@
 from games import Game
 import sqlite3 as sq
 from datetime import datetime
+import tkinter as tk
 
+
+def game_commands(text, game, r):
+
+    game_con, cur_score = gm.input_command(text)
+    print(game)
+    print(f'Score:{cur_score}')
+    if not game_con:
+        add_game(cur_score, user_cur_id)
+        r.destroy()
 
 # Create a database with users and games
 def db_create():
@@ -39,11 +49,13 @@ def add_user(username):
     return int(user)
 
 
-def add_game(score: int, user_id: int, game_time: str):
+def add_game(score: int, user_id: int):
+    game_time = datetime.strftime(datetime.now(), '%m/%d/%y %H:%M:%S')
     with sq.connect('GU_DB.db') as con:
         cur = con.cursor()
         cur.execute(f"""INSERT INTO games(user_id, score, datetime) 
                     VALUES ({user_id},{score},'{game_time}')""")
+    print('Thanks for a game')
 
 
 def write_max_score(user_id):
@@ -52,6 +64,7 @@ def write_max_score(user_id):
         cur.execute(f"""UPDATE users SET max_score = (SELECT MAX(score) 
         FROM games WHERE user_id == {user_id})
         WHERE user_id == {user_id}""")
+    print('Max score is written')
 
 
 if __name__ == '__main__':
@@ -66,17 +79,16 @@ if __name__ == '__main__':
 
     print('If you want to start enter "Start" if not enter "EndGame"')
 
-    game_con = True
-    cur_score = 0
+    root = tk.Tk()
+    root.title("Button Interface")
 
-    while game_con:
+    button_names = ["up", "down", "left", "right", "Start", "EndGame"]
 
-        command = input('Your command:')
-        game_con, cur_score = gm.input_command(command)
-        print(gm)
-        print(f'Score:{cur_score}')
+    for i, button_text in enumerate(button_names):
 
-    cur_datetime = datetime.strftime(datetime.now(), '%m/%d/%y %H:%M:%S')
-    add_game(cur_score, user_cur_id, cur_datetime)
-    print('Thanks for a game')
+        button = tk.Button(root, text=button_text, command=lambda text=button_text: game_commands(text, gm, root))
+        button.grid(row=i // 2, column=i % 2, padx=10, pady=10)
+
+    root.mainloop()
+
     write_max_score(user_cur_id)
