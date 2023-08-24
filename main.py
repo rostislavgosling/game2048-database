@@ -55,19 +55,27 @@ def write_max_score(user_id):
 
 
 if __name__ == '__main__':
+
     db_create()
+
     print("Welcome to the game\n Please enter your nickname:")
+
     nick = input()
     user_cur_id = add_user(nick)
     gm = Game()
+
     print('If you want to start enter "Start" if not enter "EndGame"')
+
     game_con = True
     cur_score = 0
+
     while game_con:
+
         command = input('Your command:')
         game_con, cur_score = gm.input_command(command)
         print(gm)
         print(f'Score:{cur_score}')
+
     cur_datetime = datetime.strftime(datetime.now(), '%m/%d/%y %H:%M:%S')
     add_game(cur_score, user_cur_id, cur_datetime)
     print('Thanks for a game')
